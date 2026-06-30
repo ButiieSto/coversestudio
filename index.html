@@ -334,9 +334,8 @@ footer .small{font-size:.82rem;color:#8A9598}
         <span><span class="ic">⚲</span>Klerksdorp, North West · serving all of SA</span>
       </div>
     </div>
-    <form id="contactForm" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="return handleSubmit(event)">
-      <input type="hidden" name="form-name" value="contact">
-      <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+    <form id="contactForm" action="https://formspree.io/f/YOUR_ID" method="POST" onsubmit="return handleSubmit(event)">
+      <p style="display:none"><label>Don't fill this out: <input name="_gotcha"></label></p>
       <div class="field"><label for="name">Your name</label><input id="name" name="name" type="text" required placeholder="Jane Dlamini"></div>
       <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required placeholder="jane@business.co.za"></div>
       <div class="field"><label for="type">What do you need?</label><input id="type" name="type" type="text" placeholder="A website, a web app, a quote…"></div>
@@ -369,8 +368,8 @@ function handleSubmit(e){
   if(!name||!email){m.style.color='#B4564B';m.textContent='Please add your name and email.';return false;}
   m.style.color='#2C4A4F';m.textContent='Sending…';
   const data=new FormData(form);
-  fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()})
-    .then(()=>{m.style.color='#2C4A4F';m.textContent='Thanks, '+name.split(' ')[0]+'! Your enquiry is in — we\u2019ll reply within one business day.';form.reset();})
+  fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}})
+    .then(r=>{if(r.ok){m.style.color='#2C4A4F';m.textContent='Thanks, '+name.split(' ')[0]+'! Your enquiry is in — we\u2019ll reply within one business day.';form.reset();}else{throw new Error();}})
     .catch(()=>{m.style.color='#B4564B';m.textContent='Something went wrong. Please email coversestudio94@gmail.com directly.';});
   return false;
 }
